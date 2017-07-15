@@ -1,6 +1,8 @@
 import ecdsa
 import json
 import dill
+from binascii import hexlify
+
 
 class Wallet(object):
     def __init__(self, sk = None, pk = None):
