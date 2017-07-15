@@ -4,8 +4,8 @@ from wallet import *
 from goofycoin import *
 
 class Goofy(Wallet):
-    def __init__(self, sk, pk):
-        Wallet.__init__(self, sk, pk)
+    def __init__(self, secret_key, public_key):
+        Wallet.__init__(self, secret_key, public_key)
 
     def make_coin(self):
         coin_id = self.generate_coin_id()
@@ -19,16 +19,16 @@ class Goofy(Wallet):
         return coin_id
 
     def sign_coin(self, coin_id):
-        return self.sk.sign(str(coin_id).encode())
+        return self.secret_key.sign(str(coin_id).encode())
 
     def sign_transfer_coin(self, coin, recipient_pk):
         return self.sign_transaction(recipient_pk, coin.coin_id)
 
 # load goofy
-with open('goofy-pk.pkl', 'rb') as file:
+with open('goofy-public_key.pkl', 'rb') as file:
     goofy_pk = dill.load(file)
 
-with open('goofy-sk.pkl', 'rb') as file:
+with open('goofy-secret_key.pkl', 'rb') as file:
     goofy_sk = dill.load(file)
 
 goofy = Goofy(goofy_sk, goofy_pk)
