@@ -6,8 +6,10 @@ import base58
 import json
 import dill
 
+from crypto import encode_data
+
 #load central authority's public key 
-with open('goofy_public-key.pkl', 'rb') as file:
+with open('goofy-public_key.pkl', 'rb') as file:
     goofy_public_key = dill.load(file)
 
 class Coin(object):
@@ -16,7 +18,7 @@ class Coin(object):
         self.signature = signature
 
     def __str__(self):
-        return self.coin_id
+        return str(self.coin_id)
 
     def verify(self):
         try: 
@@ -38,21 +40,22 @@ class TransactionBlock(object):
         return "(" + str(hexlify(self.spender_public_key.to_string())) + "," + str((self.recipient_public_key.to_string())) + "," + str(self.hash) + ")"
     
     def generate_hash(self):
-        hash_content = "(" + str(self.previous_transaction) + "," + str(self.previous_hash) + "," + str(self.recipient_public_key) + ")" 
+        hash_content = json.dumps((str(self.previous_transaction),str(self.previous_hash),str(self.recipient_public_key)))
         hash_function = sha256()
         hash_function.update(hash_content.encode())
         return hash_function.hexdigest()
      
     def verify_chain(self):
+        signature_to_check = (self.recipient_public_key, self.previous_hash)
+
         if isinstance(self.previous_transaction,Coin):
             if goofy_public_key.verify(self.previous_transaction.signature, str(self.previous_transaction.coin_id).encode()) and goofy_public_key.verify(self.signature, json.dumps((str(self.recipient_public_key),str(self.previous_transaction.coin_id))).encode()): 
                 print("Chain is authentic.")
             else: 
                 print("Chain has been tempered with.")
         elif isinstance(self.previous_transaction, TransactionBlock):
-            if self.previous_hash == self.previous_transaction.hash and self.spender_public_key == self.previous_transaction.recipient_public_key:
-                print(self.spender_public_key)
-                print(self.previous_transaction.recipient_public_key)
+            if self.previous_hash == self.previous_transaction.hash and self.spender_public_key == self.previous_transaction.recipient_public_key and self.spender_public_key.verify(self.signature, signature_to_check):
+                
                 return self.previous_transaction.verify_chain() 
             else:
                 print("Transactions " + str(self.hash) + " and " + str(self.previous_transaction.hash) + " do not match.") 

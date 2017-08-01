@@ -23,12 +23,13 @@ class Wallet(object):
 
         str_secret_key, str_public_key = hex_secret_key.decode("ascii"), hex_public_key.decode("ascii")
        
-        return("secret key: " + str_secret_key + " \n " + "public key: " + str_public_key)
+        return('secret key: ' + str_secret_key + "\n" + 'public key: ' + str_public_key).format()
 
     def sign_transaction(self, recipient_public_key, previous_hash):
         data = (recipient_public_key, previous_hash)
         encoded_data = encode_data(data)
         signature = self.secret_key.sign(encoded_data)
+
         return signature
 
     def save_wallet(self, filename):
@@ -41,7 +42,7 @@ class Wallet(object):
                 
 
     @classmethod
-    def load(cls, filename): #cls stands for class, because the variable name class is taken
+    def load_wallet(cls, filename): #cls stands for class, because the variable name class is taken
         with open(filename, 'rb') as temp_file:
             print("Wallet loaded.")
             temp_array = temp_file.read().splitlines()
