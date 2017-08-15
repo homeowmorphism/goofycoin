@@ -8,14 +8,16 @@ $ git clone https://github.com/homeowmorphism/goofycoin.git
 
 ## Dependencies
 - Python 3
-- dill, base58, ecdsa
+- base58, ecdsa
 
-## For Code Reviewers
-Relevant files are:
-
-wallet.py, goofy.py, goofycoin.py.
-
-Test file is test.py.
+## Security 
+* Goofycoin depends on the ecdsa library, which is does not protect against timing attacks. 
+* Goofycoin was written as a toy project by a non-cryptographer. I did my best but I'm sure there are many security flaws that someone well-versed in the field could easily point out. 
 
 # Run Goofycoin
 TODO
+
+# Still Left To Do
+- Move the folders around. 
+- Use a full unit testing suite and understand what that's about. 
+- Refactore my code/apply suggestion in code review.

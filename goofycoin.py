@@ -4,28 +4,11 @@ from binascii import hexlify
 import random 
 import base58
 import json
-import dill
 
 from crypto import encode_data
 
-#load central authority's public key 
-with open('goofy-public_key.pkl', 'rb') as file:
-    goofy_public_key = dill.load(file)
-
-class Coin(object):
-    def __init__(self, coin_id, signature):
-        self.coin_id = coin_id 
-        self.signature = signature
-
-    def __str__(self):
-        return str(self.coin_id)
-
-    def verify(self):
-        try: 
-            goofy_public_key.verify(self.signature, str(self.coin_id).encode())
-            print("Coin is authentic.")
-        except ecdsa.keys.BadSignatureError:
-            print("Coin is fake.")
+#load central operator public key
+GOOFY_PK_FILE = None
 
 class TransactionBlock(object):
     def __init__(self, previous_transaction, previous_hash, spender_public_key,  recipient_public_key, signature):
@@ -37,7 +20,7 @@ class TransactionBlock(object):
         self.hash = self.generate_hash() 
 
     def __str__(self):
-        return "(" + str(hexlify(self.spender_public_key.to_string())) + "," + str((self.recipient_public_key.to_string())) + "," + str(self.hash) + ")"
+        return str(hexlify(self.spender_public_key.to_string())) + "," + str((self.recipient_public_key.to_string())) + "," + str(self.hash) + ")"
     
     def generate_hash(self):
         hash_content = json.dumps((str(self.previous_transaction),str(self.previous_hash),str(self.recipient_public_key)))
@@ -63,5 +46,23 @@ class TransactionBlock(object):
         else: 
             print("Types do not match up in the chain.")
 
+class ExternalUser(object):
+    def __init__(self, public_key):
+        self.public_key = public_key
+
+    def save_public_key(self, filename):
+        with open(filename, 'wb') as temp_file:
+            hex_public_key = helixfy(self.public_key.to_string())
+            temp_file.write(hex_public_key)
         
+    @classmethod
+    def public_key_load(cls, filename):
+        with open(filename, 'rb') as temp_file:
+            print("Public key loaded.")
+            public_key_hex = temp_file.read()
+            public_key_bytes = unhexlify(public_key_hex)
+            public_key = ecdsa.SigningKey.from_string(public_key_bytes, settings.bitcoin_curve)
+            return ExternalUser(public_key) 
+
+user_goofy = ExternalUser.public_key_load(ExternalUser('goofy_public_key.txt'))
 
