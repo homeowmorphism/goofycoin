@@ -20,7 +20,7 @@ $ git clone https://github.com/homeowmorphism/goofycoin.git
 ## Run Goofycoin
 TODO
 
-# Still Left To Do
+## Still Left To Do
 - Move the folders around. 
 - Use a full unit testing suite and understand what that's about. 
 - Refactore my code/apply suggestion in code review.
