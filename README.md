@@ -1,7 +1,10 @@
 # Goofycoin 
+
+*Status: WIP*
+
 A toy implementation of a cryptocurrency, as described in [Bitcoin and Cryptocurrency Technologies](http://bitcoinbook.cs.princeton.edu/).
 
-# Install Goofycoin
+## Install Goofycoin
 ```
 $ git clone https://github.com/homeowmorphism/goofycoin.git
 ```
@@ -14,7 +17,7 @@ $ git clone https://github.com/homeowmorphism/goofycoin.git
 * Goofycoin depends on the ecdsa library, which is does not protect against timing attacks. 
 * Goofycoin was written as a toy project by a non-cryptographer. I did my best but I'm sure there are many security flaws that someone well-versed in the field could easily point out. 
 
-# Run Goofycoin
+## Run Goofycoin
 TODO
 
 # Still Left To Do
