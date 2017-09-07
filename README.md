@@ -14,7 +14,7 @@ $ git clone https://github.com/homeowmorphism/goofycoin.git
 - base58, ecdsa
 
 ## Security 
-* Goofycoin was written as a toy project by a non-cryptographer. I did my best but I'm sure there are many security flaws that someone well-versed in the field could easily point out. 
+* Goofycoin was written as a toy project by a non-cryptographer. 'Nuff said.
 * Goofycoin depends on the ecdsa library, which is does not protect against timing attacks. 
 
 ## Run Goofycoin
