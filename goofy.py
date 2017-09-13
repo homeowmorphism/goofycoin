@@ -5,6 +5,8 @@ import base58
 import settings
 from wallet import Wallet 
 from coin import Coin
+from blockchain import TransactionBlock
+from crypto import encode_data
 
 class Goofy(Wallet):
     def __init__(self, secret_key, public_key):
@@ -26,21 +28,19 @@ class Goofy(Wallet):
         return self.secret_key.sign(encoded_id)
 
     def sign_transfer_coin(self, coin_id, recipient_pk):
-        encoded_data = encode_data(coin.coin_id, recipient_pk)
-        return self.sign_transaction(encoded_data)
+        encoded_data = encode_data((coin_id, recipient_pk))
+        return self.secret_key.sign(encoded_data)
 
     def gen_first_block(self, coin, recipient_pk):
-        prev_block = None
-        prev_hash = None
+        prev_block = coin
         spender_pk = self.public_key
         sign = self.sign_transfer_coin(coin.coin_id, recipient_pk)
-        return TransactionBlock(prev_block, prev_hash, spender_pk, recipient_pk, sign)
+
+#        print("Coin " + str(coin) + " has been transferred to" + recipient_pk.to_string())
+        return TransactionBlock(prev_block, spender_pk, recipient_pk, sign)
 
     @classmethod
-    def load_goofy(cls, wallet_name):
-        goofy_wallet = Wallet.load_wallet(wallet_name)
+    def load(cls):
+        wallet_name = settings.GOOFY_FILENAME 
+        wallet = Wallet.load_wallet(wallet_name)
         return Goofy(wallet.secret_key, wallet.public_key)
-
-# auxiliary
-#def make_coin_transfer(coin, recipient_pk, signature):
-#   return TransactionBlock(coin, None, goofy_public_key, recipient_pk, signature)  

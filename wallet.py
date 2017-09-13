@@ -25,8 +25,20 @@ class Wallet(object):
 
         return("secret key: " + str_secret_key + " \n " + "public key: " + str_public_key)
 
-    def sign_transaction(self, recipient_public_key, previous_hash):
-        data = (recipient_public_key, previous_hash)
+    def make_transaction(self, recipient_public_key, previous_block):
+        trans_block = TransactionBlock(
+                previous_block,
+                self.public_key,
+                recipient.public_key,
+                self.sign_transaction(recipient_public_key, previous_block))
+        return trans_block 
+
+    def sign_transaction(self, recipient_public_key, previous_block):
+        try:
+            data = (recipient_public_key, previous_block.generate_hash())
+        # if the prev block is something unexpected
+        except AttributeError:
+            data = (recipient_public_key, None)
         encoded_data = encode_data(data)
         signature = self.secret_key.sign(encoded_data)
         return signature

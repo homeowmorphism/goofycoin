@@ -7,6 +7,7 @@ import os
 import settings
 from crypto import encode_data
 from wallet import Wallet
+from goofy import Goofy
 
 # Wallet tests
 alice = Wallet()
@@ -18,10 +19,23 @@ def test_wallet_str():
     pass
     # parse public key, secret key
 
+def test_make_transaction():
+    pass
+
 def test_sign_transaction():
-    message = encode_data(("bob", "123"))
-    sign = alice.sign_transaction("bob", "123")
-    assert alice.public_key.verify(sign, message)
+    expected_message = encode_data(("bob", "123"))
+    actual_sign = alice.sign_transaction("bob", "123")
+    with pytest.raises(ecdsa.BadSignatureError):
+        alice.public_key.verify(actual_sign, expected_message)
+
+
+    goofy_wallet = Goofy.load()  
+    coin = goofy_wallet.make_coin()
+    first_block = goofy_wallet.gen_first_block(coin, alice.public_key)
+    expected_message = encode_data(("bob", first_block.hash))
+    actual_sign = alice.sign_transaction("bob", first_block)
+    assert alice.public_key.verify(actual_sign, expected_message)
+
 
 def test_save_key():
     wallet_name = "test_save_key"
@@ -116,6 +130,7 @@ def test_load_secret_key():
 def test_wallet():
     test_wallet_init()
     test_wallet_str()
+    test_make_transaction()
     test_sign_transaction()
     test_save_key()
     test_save_public_key()
