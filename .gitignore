@@ -1,8 +1,0 @@
-.gitignore
-*.swp
-*.swo
-*.pyc
-__pycache__
-archive/
-presentation/
-
