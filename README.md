@@ -1,6 +1,6 @@
 # Goofycoin 
 
-*Status: WIP*
+*Status: Almost done!*
 
 A toy implementation of a cryptocurrency, as described in [Bitcoin and Cryptocurrency Technologies](http://bitcoinbook.cs.princeton.edu/).
 
