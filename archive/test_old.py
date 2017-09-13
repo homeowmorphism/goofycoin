@@ -39,20 +39,21 @@ def test_wallet():
 @patch('random.getrandbits', return_value =
 seeded_randbits())
 def test_goofy(mock_seeded_randbits):
-    entropy_seed = PRNG("seed")
-    saved_coin_id = '2bZcPUkdCaHuTfhdgGS4Cz96AAv4S5vqWaeHYH8YGUCXAxa5eXNSwbFTcpaAkK6JULZp7J1wj7LoFYACTooKYd2F7aAjiqJkvq1qJSjrnbA'
-    saved_coin_signature = b'\xcb\xce\x0f\x84\xce]-\x19<\x8f\x19\xf6\xc0E\xb9\xf7\x00u\xe6\xddv\x14k\xeb\xcddR\xab\xb4\x00t\xeb\xc8Ej\x187w\x0c\xd4\xe4\xf9Cwh\xebT\xd2\xa5\t\xef4\xb1\xaaM\x9eir(@;\xec3\x8a'
+    expected_coin_id = '2bZcPUkdCaHuTfhdgGS4Cz96AAv4S5vqWaeHYH8YGUCXAxa5eXNSwbFTcpaAkK6JULZp7J1wj7LoFYACTooKYd2F7aAjiqJkvq1qJSjrnbA'
+    expected_coin_signature = b'\xcb\xce\x0f\x84\xce]-\x19<\x8f\x19\xf6\xc0E\xb9\xf7\x00u\xe6\xddv\x14k\xeb\xcddR\xab\xb4\x00t\xeb\xc8Ej\x187w\x0c\xd4\xe4\xf9Cwh\xebT\xd2\xa5\t\xef4\xb1\xaaM\x9eir(@;\xec3\x8a'
 
     goofy_wallet = Wallet.load('goofy.txt')
     goofy_wallet = goofy.Goofy(goofy_wallet.secret_key,goofy_wallet.public_key)
 
     coin = goofy_wallet.make_coin()
+    
+    entropy_seed = PRNG("seed")
     coin_signature = goofy_wallet.secret_key.sign(str(coin.coin_id).encode(), entropy = entropy_seed)
     #coin_transfer_signature = goofy_wallet.sign_transfer_coin(coin, bob.public_key)
     
     assert isinstance(coin, Coin) == True
-    assert coin.coin_id == saved_coin_id 
-    assert coin_signature == saved_coin_signature 
+    assert coin.coin_id == expected_coin_id 
+    assert coin_signature == expected_coin_signature 
     #assert coin_transfer-signature
 
 def test_goofycoin():
@@ -76,8 +77,8 @@ def test_all():
     test_goofy()
     test_goofycoin()
 
-#test_wallet()
-#test_goofy()
+test_wallet()
+test_goofy()
 #test_goofycoin()
 
-test_all()
+#test_all()

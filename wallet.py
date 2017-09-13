@@ -7,11 +7,6 @@ from binascii import hexlify, unhexlify
 from crypto import encode_data
 import settings
 
-SCRIPT_DIRECTORY = os.path.dirname(__file__)
-WALLETS_REL_PATH = 'wallets'
-WALLETS_ABS_PATH = os.path.join(SCRIPT_DIRECTORY, WALLETS_REL_PATH)
-
-
 class Wallet(object):
     def __init__(self, secret_key=None, public_key=None):
         if secret_key is None:
@@ -35,30 +30,73 @@ class Wallet(object):
         encoded_data = encode_data(data)
         signature = self.secret_key.sign(encoded_data)
         return signature
-
-   def save_key(self, filename, keytype): 
     
-    def save_public_key(self, filename):
-        public_key_path = os.path.join(wallets_abs_path, filename)
-        with open(public_key_path, 'wb') as temp_file:
-            hex_public_key = hexlify(self.public_key.to_string())
-            temp_file.write(hex_secret_key)
+    def save_key(self, wallet_name, key_type): 
+        if key_type == 'public_key':
+            key = self.public_key
+            key_path = os.path.join(settings.WALLETS_ABS_PATH, wallet_name + ".pk" )
 
-    def save_secret_key(self, filename):
-        with open(filename, 'wb') as temp_file:
-            hex_secret_key = hexlify(self.secret_key.to_string())
-            temp_file.write(hex_secret_key)
+        elif key_type == 'secret_key':
+            key = self.secret_key
+            key_path = os.path.join(settings.WALLETS_ABS_PATH, wallet_name + ".sk" )
+
+        else:
+            raise ValueError('Third argument key_type needs to be either public_key or secret_key.')
+
+        with open(key_path, 'wb') as temp_file:
+            hex_key = hexlify(key.to_string())
+            temp_file.write(hex_key)
+
+    def save_public_key(self, wallet_name):
+        self.save_key(wallet_name, 'public_key')
+        print("Public key saved.")
+
+    def save_secret_key(self, wallet_name):
+        self.save_key(wallet_name, 'secret_key')
+        print("Secret key saved.")
 
     def save_wallet(self, wallet_name):
-        save_public_key(wallet_name+'-public_key.txt')
-        save_private_key(wallet_name+'private_key.txt')
-        print("Wallet saved.")
+        self.save_public_key(wallet_name)
+        self.save_secret_key(wallet_name)
 
-
-# LOAD IS BROKEN
     @classmethod
-    def deprecated_load(cls, filename): #cls stands for class, because the variable name class is taken
-        with open(filename, 'rb') as temp_file:
+    def load_key(cls, wallet_name, key_type):
+        if key_type == 'public_key':
+            ecdsa_key = ecdsa.VerifyingKey
+            extension = ".pk"
+        elif key_type =='secret_key':
+            ecdsa_key = ecdsa.SigningKey
+            extension = ".sk"
+        else:
+            raise ValueError('Third argument key_type needs to be either public_key or secret_key.')
+        
+        key_path = os.path.join(settings.WALLETS_ABS_PATH, wallet_name + extension)
+        with open(key_path, 'rb') as temp_file:
+            hex_key = temp_file.read()
+            bytes_key = unhexlify(hex_key)
+            key = ecdsa_key.from_string(bytes_key, settings.bitcoin_curve)
+
+        return key 
+
+    @classmethod
+    def load_public_key(cls, wallet_name):
+        return cls.load_key(wallet_name, 'public_key')
+        print("Public key loaded.")
+
+    @classmethod
+    def load_secret_key(cls, wallet_name):
+        return cls.load_key(wallet_name, 'secret_key')
+        print("Secret key loaded.")
+
+    @classmethod
+    def load_wallet(cls, wallet_name):
+        secret_key = cls.load_secret_key(wallet_name)
+        public_key = cls.load_public_key(wallet_name)
+        return Wallet(secret_key, public_key)
+
+    @classmethod
+    def deprecated_load(cls, wallet_name): #cls stands for class, because the variable name class is taken
+        with open(wallet_name, 'rb') as temp_file:
             temp_array = temp_file.read().splitlines()
             secret_key_hex, public_key_hex = temp_array 
             secret_key_bytes, public_key_bytes = unhexlify(secret_key_hex), unhexlify(public_key_hex)
