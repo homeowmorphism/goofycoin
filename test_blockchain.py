@@ -1,6 +1,6 @@
-from blockchain import TransactionBlock
-from wallet import Wallet
-from goofy import Goofy
+from goofycoin.blockchain import TransactionBlock
+from goofycoin.wallet import Wallet
+from goofycoin.goofy import Goofy
 
 alice = Wallet()
 goofy_wallet = Goofy.load()  

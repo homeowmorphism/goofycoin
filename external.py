@@ -2,7 +2,7 @@ import os
 from binascii import unhexlify
 import ecdsa
 
-import settings
+import goofycoin.settings as settings
 
 class ExternalUser():
     def __init__(self, username):

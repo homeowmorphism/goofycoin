@@ -4,13 +4,12 @@ import random
 from binascii import hexlify, unhexlify
 import os
 
-import settings
-from crypto import encode_data
-from wallet import Wallet
-from goofy import Goofy
-from blockchain import TransactionBlock
+import goofycoin.settings
+from goofycoin.crypto import encode_data
+from goofycoin.wallet import Wallet
+from goofycoin.goofy import Goofy
+from goofycoin.blockchain import TransactionBlock
 
-# Wallet tests
 alice = Wallet()
 def test_wallet_init():
     assert len(alice.secret_key.to_string()) == 32

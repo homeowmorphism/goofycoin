@@ -2,11 +2,11 @@ import json
 import random
 import base58
 
-import settings
-from wallet import Wallet 
-from coin import Coin
-from blockchain import TransactionBlock
-from crypto import encode_data
+import goofycoin.settings as settings
+from goofycoin.wallet import Wallet 
+from goofycoin.coin import Coin
+from goofycoin.blockchain import TransactionBlock
+from goofycoin.crypto import encode_data
 
 class Goofy(Wallet):
     def __init__(self, secret_key, public_key):

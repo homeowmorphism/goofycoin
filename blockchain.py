@@ -5,10 +5,10 @@ import random
 import base58
 import json
 
-import settings 
-from crypto import encode_data
-from external import ExternalUser 
-from coin import Coin
+import goofycoin.settings 
+from goofycoin.crypto import encode_data
+from goofycoin.external import ExternalUser 
+from goofycoin.coin import Coin
 
 # in this scheme, every transaction is a block
 class TransactionBlock(object):

@@ -3,9 +3,9 @@ import json
 import os
 from binascii import hexlify, unhexlify
 
-import settings
-from crypto import encode_data
-from blockchain import TransactionBlock
+import goofycoin.settings as settings
+from goofycoin.crypto import encode_data
+from goofycoin.blockchain import TransactionBlock
 
 class Wallet(object):
     def __init__(self, secret_key=None, public_key=None):

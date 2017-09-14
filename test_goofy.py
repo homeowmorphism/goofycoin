@@ -1,12 +1,12 @@
 import os
 import base58
 
-from crypto import encode_data
-from goofy import Goofy
-from coin import Coin
-from wallet import Wallet
-from blockchain import TransactionBlock
-import settings
+import goofycoin.settings as settings
+from goofycoin.crypto import encode_data
+from goofycoin.goofy import Goofy
+from goofycoin.coin import Coin
+from goofycoin.wallet import Wallet
+from goofycoin.blockchain import TransactionBlock
 
 wallet = Wallet()
 goofy_wallet = Goofy(wallet.secret_key, wallet.public_key)

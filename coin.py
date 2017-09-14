@@ -1,6 +1,6 @@
 import ecdsa
 
-from external import ExternalUser 
+from goofycoin.external import ExternalUser 
 
 class Coin(object):
     def __init__(self, coin_id, signature):
