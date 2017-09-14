@@ -7,7 +7,7 @@ import json
 
 import settings 
 from crypto import encode_data
-from load_central_authority import load_goofy_public_key
+from external import ExternalUser 
 from coin import Coin
 
 # in this scheme, every transaction is a block
@@ -20,7 +20,6 @@ class TransactionBlock(object):
         # in case there is no previous block
         except AttributeError:
             self.previous_hash = None
-
 
         self.spender_public_key = spender_public_key
         self.recipient_public_key = recipient_public_key
@@ -41,7 +40,7 @@ class TransactionBlock(object):
      
     def chain_is_authentic(self):
         try:
-            goofy_public_key = load_goofy_public_key()
+            goofy_public_key = ExternalUser.load_goofy_public_key()
             signature_to_check = encode_data((self.recipient_public_key, self.previous_hash))
 
             if isinstance(self.previous_block,Coin):

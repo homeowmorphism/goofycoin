@@ -21,7 +21,6 @@ def test_wallet_str():
     pass
 
 bob = Wallet()
-
 goofy_wallet = Goofy.load()  
 coin = goofy_wallet.make_coin()
 first_block = goofy_wallet.gen_first_block(coin, alice.public_key)
@@ -31,7 +30,7 @@ def test_make_transaction():
     assert trans.spender_public_key == alice.public_key
     assert trans.recipient_public_key == bob.public_key
     assert trans.previous_block == first_block
-    assert alice.public_key.verify(trans.signature, encode_data((bob.public_key, first_block)))
+    assert alice.public_key.verify(trans.signature, encode_data((bob.public_key, first_block.hash)))
 
 def test_sign_transaction():
     expected_message = encode_data(("bob", "123"))

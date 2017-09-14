@@ -1,6 +1,6 @@
 import ecdsa
 
-from load_central_authority import load_goofy_public_key
+from external import ExternalUser 
 
 class Coin(object):
     def __init__(self, coin_id, signature):
@@ -11,7 +11,7 @@ class Coin(object):
         return str(self.coin_id) + " : " + self.verify()
 
     def verify(self):
-        goofy_public_key = load_goofy_public_key()
+        goofy_public_key = ExternalUser.load_goofy_public_key()
         try: 
             goofy_public_key.verify(self.signature, str(self.coin_id).encode())
             return "Valid."

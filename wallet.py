@@ -29,7 +29,7 @@ class Wallet(object):
         trans_block = TransactionBlock(
                 previous_block,
                 self.public_key,
-                recipient.public_key,
+                recipient_public_key,
                 self.sign_transaction(recipient_public_key, previous_block))
         return trans_block 
 
