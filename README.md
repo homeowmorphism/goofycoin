@@ -14,5 +14,5 @@ A toy implementation of a cryptocurrency, as described in [Bitcoin and Cryptocur
 
 ## Still Left To Do
 - Move the folders around. 
-- Write a Wallet class method for making a transaction.
+- Fix circular dependency with Wallet and goofy_pk.
 (Will be nice to have a user interface for this but not sure what the best way to do this is.)
