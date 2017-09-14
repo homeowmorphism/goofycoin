@@ -1,11 +1,11 @@
-# library functions
 import ecdsa
 import json
 import os
 from binascii import hexlify, unhexlify
-# directory files
-from crypto import encode_data
+
 import settings
+from crypto import encode_data
+from blockchain import TransactionBlock
 
 class Wallet(object):
     def __init__(self, secret_key=None, public_key=None):

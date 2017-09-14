@@ -8,6 +8,7 @@ import settings
 from crypto import encode_data
 from wallet import Wallet
 from goofy import Goofy
+from blockchain import TransactionBlock
 
 # Wallet tests
 alice = Wallet()
@@ -16,11 +17,21 @@ def test_wallet_init():
     assert len(alice.public_key.to_string()) == 64
 
 def test_wallet_str():
+    # not worth it for now
     pass
-    # parse public key, secret key
 
+bob = Wallet()
+
+goofy_wallet = Goofy.load()  
+coin = goofy_wallet.make_coin()
+first_block = goofy_wallet.gen_first_block(coin, alice.public_key)
 def test_make_transaction():
-    pass
+    trans = alice.make_transaction(bob.public_key, first_block)
+    assert isinstance(trans, TransactionBlock)
+    assert trans.spender_public_key == alice.public_key
+    assert trans.recipient_public_key == bob.public_key
+    assert trans.previous_block == first_block
+    assert alice.public_key.verify(trans.signature, encode_data((bob.public_key, first_block)))
 
 def test_sign_transaction():
     expected_message = encode_data(("bob", "123"))
@@ -28,10 +39,6 @@ def test_sign_transaction():
     with pytest.raises(ecdsa.BadSignatureError):
         alice.public_key.verify(actual_sign, expected_message)
 
-
-    goofy_wallet = Goofy.load()  
-    coin = goofy_wallet.make_coin()
-    first_block = goofy_wallet.gen_first_block(coin, alice.public_key)
     expected_message = encode_data(("bob", first_block.hash))
     actual_sign = alice.sign_transaction("bob", first_block)
     assert alice.public_key.verify(actual_sign, expected_message)
