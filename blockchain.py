@@ -63,3 +63,12 @@ class TransactionBlock(object):
 
         except ecdsa.BadSignatureError:
             return False
+
+    def to_list_entry():
+        return {
+                "previous_hash":        self.previous_hash, 
+                "spender_public_key":   self.spender_public_key 
+                "recipient_public_key": self.recipient_public_key
+                "signature":            self.signature
+                "hash":                 self.hash 
+                }
